@@ -54,8 +54,8 @@ size_t RingBuffer::put(const void* buffer, size_t size)
 	// update COUNT
 
 	PINT64 const offsetCount = (PINT64)info;
-	PINT64 const offsetStart = (PINT64)info + 8;
-	PINT64 const offsetEnd = (PINT64)info + 16;
+	PINT64 const offsetStart = (PINT64)info + 1;
+	PINT64 const offsetEnd = (PINT64)info + 2;
 
 	size_t remain = size;
 	do
@@ -106,8 +106,8 @@ size_t RingBuffer::get(void* buffer, size_t size)
 	// update COUNT
 
 	PINT64 const offsetCount = (PINT64)info;
-	PINT64 const offsetStart = (PINT64)info + 8;
-	PINT64 const offsetEnd = (PINT64)info + 16;
+	PINT64 const offsetStart = (PINT64)info + 1;
+	PINT64 const offsetEnd = (PINT64)info + 2;
 
 	size_t remain = size;
 	do
@@ -152,8 +152,8 @@ size_t RingBuffer::get(void* buffer, size_t size)
 size_t RingBuffer::get_some(void* buffer, size_t size)
 {
 	PINT64 const offsetCount = (PINT64)info;
-	PINT64 const offsetStart = (PINT64)info + 8;
-	PINT64 const offsetEnd = (PINT64)info + 16;
+	PINT64 const offsetStart = (PINT64)info + 1;
+	PINT64 const offsetEnd = (PINT64)info + 2;
 
 	INT64 count = 0;
 
@@ -188,8 +188,8 @@ size_t RingBuffer::get_some(void* buffer, size_t size)
 void RingBuffer::debug()
 {
 	PINT64 const offsetCount = (PINT64)info;
-	PINT64 const offsetStart = (PINT64)info + 8;
-	PINT64 const offsetEnd = (PINT64)info + 16;
+	PINT64 const offsetStart = (PINT64)info + 1;
+	PINT64 const offsetEnd = (PINT64)info + 2;
 
 	std::cout << *offsetCount << " (" << *offsetStart << " -> " << *offsetEnd << ")" << std::endl;
 }
