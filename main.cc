@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cassert>
 #include <thread>
+#include <chrono>
 #include <windows.h>
 #include <ringbuffer.h>
 
@@ -22,16 +23,23 @@ int main()
 
 	//
 	std::cout << "transmit" << std::endl;
-	std::thread t1([&]() {
-		rb.put(src, size);
-	});
+	auto start = std::chrono::high_resolution_clock::now();
+	for (int i = 0; i < 10; i++)
+	{
+		std::thread t1([&]() {
+			rb.put(src, size);
+		});
 
-	std::thread t2([&]() {
-		rb.get(dst, size);
-	});
+		std::thread t2([&]() {
+			rb.get(dst, size);
+		});
 
-	t1.join();
-	t2.join();
+		t1.join();
+		t2.join();
+	}
+	auto end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> diff = end - start;
+	std::cout << diff.count() << std::endl;
 	std::cout << "transmit done!" << std::endl;
 
 	std::cout << "check dst buffer" << std::endl;
