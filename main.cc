@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cassert>
+#include <thread>
 #include <windows.h>
 #include <ringbuffer.h>
 
@@ -7,16 +8,47 @@ int main()
 {
 	RingBuffer rb("MIRROR", 10);
 
-	char buf[4096] = "hello";
+	size_t size = 1LL << 20;
+	char* src = new char[size];
+	char* dst = new char[size];
 
 	//
-	rb.put(buf, 256);
-	rb.debug();
+	std::cout << "initialize src buffer" << std::endl;
+	for (size_t i = 0; i < size; i++)
+	{
+		src[i] = (i & 0xff);
+	}
+	std::cout << "initialize src buffer finished" << std::endl;
 
-	//
-	rb.get(buf, 128);
-	rb.debug();
+	std::thread t1([&]() {
+		rb.put(src, size);
+	});
 
-	// system("pause");
+	std::thread t2([&]() {
+		rb.get(dst, size);
+	});
+
+	t1.join();
+	t2.join();
+
+	std::cout << "check dst buffer" << std::endl;
+	for (size_t i = 0; i < size; i++)
+	{
+		// printf("%08llx %02x %02x\n", i, (unsigned char)src[i], (unsigned char)dst[i]);
+		
+		if ((unsigned char)dst[i] != (i & 0xff))
+		{
+			std::cout << "check failed" << std::endl;
+
+			printf("%08llx %02x %02x\n", i, (unsigned char)src[i], (unsigned char)dst[i]);
+			break;
+		}
+	}
+	std::cout << "check dst buffer finished" << std::endl;
+
+	delete[] src;
+	delete[] dst;
+
+	system("pause");
 	return 0;
 }
