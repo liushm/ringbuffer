@@ -72,12 +72,12 @@ size_t RingBuffer::put(const void* buffer, size_t size)
 				const size_t part1 = buffSize - *offsetEnd;
 				const size_t part2 = *offsetEnd + (INT64)bSize - buffSize;
 
-				memcpy((UCHAR*)buff + *offsetEnd, buffer, part1);
-				memcpy((UCHAR*)buff, buffer, part2);
+				memcpy((PUCHAR)buff + *offsetEnd, (PUCHAR)buffer + size - remain, part1);
+				memcpy((PUCHAR)buff, (PUCHAR)buffer + size - remain + part1, part2);
 			}
 			else
 			{
-				memcpy((UCHAR*)buff + *offsetEnd, buffer, bSize);
+				memcpy((PUCHAR)buff + *offsetEnd, (PUCHAR)buffer + size - remain, bSize);
 			}
 
 			// atomic is NOT necessary here
@@ -123,12 +123,12 @@ size_t RingBuffer::get(void* buffer, size_t size)
 				const size_t part1 = buffSize - *offsetStart;
 				const size_t part2 = *offsetStart + (INT64)bSize - buffSize;
 
-				memcpy(buffer, (UCHAR*)buff + *offsetStart, part1);
-				memcpy(buffer, (UCHAR*)buff, part2);
+				memcpy((PUCHAR)buffer + size - remain, (PUCHAR)buff + *offsetStart, part1);
+				memcpy((PUCHAR)buffer + size - remain + part1, (PUCHAR)buff, part2);
 			}
 			else
 			{
-				memcpy(buffer, (UCHAR*)buff + *offsetStart, bSize);
+				memcpy((PUCHAR)buffer + size - remain, (PUCHAR)buff + *offsetStart, bSize);
 			}
 
 			// atomic is NOT necessary here
@@ -169,12 +169,12 @@ size_t RingBuffer::get_some(void* buffer, size_t size)
 		const size_t part1 = buffSize - *offsetStart;
 		const size_t part2 = *offsetStart + (INT64)bSize - buffSize;
 
-		memcpy(buffer, (UCHAR*)buff + *offsetStart, part1);
-		memcpy(buffer, (UCHAR*)buff, part2);
+		memcpy((PUCHAR)buffer, (PUCHAR)buff + *offsetStart, part1);
+		memcpy((PUCHAR)buffer + part1, (PUCHAR)buff, part2);
 	}
 	else
 	{
-		memcpy(buffer, (UCHAR*)buff + *offsetStart, bSize);
+		memcpy((PUCHAR)buffer, (PUCHAR)buff + *offsetStart, bSize);
 	}
 
 	// atomic is NOT necessary here

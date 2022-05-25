@@ -6,9 +6,9 @@
 
 int main()
 {
-	RingBuffer rb("MIRROR", 10);
+	RingBuffer rb("MIRROR", 20);
 
-	size_t size = 1LL << 20;
+	size_t size = 1LL << 30;
 	char* src = new char[size];
 	char* dst = new char[size];
 
@@ -20,6 +20,8 @@ int main()
 	}
 	std::cout << "initialize src buffer finished" << std::endl;
 
+	//
+	std::cout << "transmit" << std::endl;
 	std::thread t1([&]() {
 		rb.put(src, size);
 	});
@@ -30,6 +32,7 @@ int main()
 
 	t1.join();
 	t2.join();
+	std::cout << "transmit done!" << std::endl;
 
 	std::cout << "check dst buffer" << std::endl;
 	for (size_t i = 0; i < size; i++)
