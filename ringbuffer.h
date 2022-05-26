@@ -3,7 +3,7 @@
 class SharedMem
 {
 public:
-	SharedMem(std::string name, unsigned long long size);
+	SharedMem(const std::string& name, unsigned long long size);
 	~SharedMem();
 
 	SharedMem() = delete;
@@ -21,7 +21,7 @@ protected:
 class RingBuffer
 {
 public:
-	RingBuffer(std::string name, unsigned char exp);
+	RingBuffer(const std::string& name, unsigned char exp);
 	~RingBuffer();
 
 	RingBuffer() = delete;

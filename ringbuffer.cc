@@ -5,7 +5,7 @@
 
 #include "ringbuffer.h"
 
-SharedMem::SharedMem(std::string name, unsigned long long size)
+SharedMem::SharedMem(const std::string& name, unsigned long long size)
 {
 	hMap = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, name.c_str());
 	if (!hMap)
@@ -34,7 +34,7 @@ SharedMem::~SharedMem()
 }
 
 
-RingBuffer::RingBuffer(std::string name, unsigned char exp) :
+RingBuffer::RingBuffer(const std::string& name, unsigned char exp) :
 	info(name + "_info", 24),
 	buff(name + "_data", 1LL << exp),
 	buffSize(1LL << exp),
