@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 project(test VERSION 0.1.0 LANGUAGES CXX C)
 
 # RingBuffer lib
-add_library(ringbuffer STATIC ringbuffer.cc)
+add_library(ringbuffer STATIC ringbuffer.cc ringbuffer.h)
 target_include_directories(ringbuffer PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_compile_features(ringbuffer PUBLIC cxx_std_17)
 

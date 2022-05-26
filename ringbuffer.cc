@@ -10,15 +10,9 @@ SharedMem::SharedMem(const std::string& name, unsigned long long size)
 	hMap = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, name.c_str());
 	if (!hMap)
 	{
-		std::cout << "open failed, create it!" << std::endl;
-
 		hMap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, size >> 32, size & 0xFFFFFFFF, name.c_str());
 	}
-	else
-	{
-		std::cout << "opened!" << std::endl;
-	}
-
+	
 	if (hMap)
 	{
 		addr = MapViewOfFile(hMap, FILE_MAP_ALL_ACCESS, 0, 0, size);
@@ -160,6 +154,7 @@ size_t RingBuffer::get_some(void* buffer, size_t size)
 	// loop till received some data
 	while ((count = InterlockedXor64(offsetCount, 0)) == 0)
 	{
+		SwitchToThread();
 	}
 
 	size_t bSize = std::min((size_t)count, size);
