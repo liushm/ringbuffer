@@ -4,7 +4,7 @@ class SharedMem
 {
 public:
 	SharedMem(const std::string& name, unsigned long long size);
-	~SharedMem();
+	virtual ~SharedMem();
 
 	SharedMem() = delete;
 	SharedMem(const SharedMem& shm) = delete;
@@ -22,7 +22,7 @@ class RingBuffer
 {
 public:
 	RingBuffer(const std::string& name, unsigned char exp);
-	~RingBuffer();
+	virtual ~RingBuffer();
 
 	RingBuffer() = delete;
 	RingBuffer(const RingBuffer& rb) = delete;
