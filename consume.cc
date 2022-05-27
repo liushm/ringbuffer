@@ -1,17 +1,31 @@
 #include <iostream>
 #include <cassert>
+#include <chrono>
 #include <windows.h>
 #include <ringbuffer.h>
-
-char buf[1024 * 1024] = "hello";
 
 int main()
 {
 	RingBuffer rb("MIRROR", 20);
 
-	rb.get_some(buf, sizeof(buf));
+	const size_t CNT = 1LL << 28;
+	float* vertex = new float[CNT];
 
-	std::cout << buf << std::endl;
+	for (int i = 0; i < 10; i++)
+	{
+		rb.get(vertex, CNT * sizeof(float));
+	}
+
+	// timestamp before transmit
+	double ts;
+	rb.get(&ts, sizeof(double));
+
+	// timestamp now
+	std::chrono::duration<double> tm = std::chrono::high_resolution_clock::now().time_since_epoch();
+
+	std::cout << tm.count() - ts << std::endl;
+
+	delete[] vertex;
 
 	system("pause");
 	return 0;

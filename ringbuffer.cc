@@ -7,10 +7,10 @@
 
 SharedMem::SharedMem(const std::string& name, unsigned long long size)
 {
-	hMap = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, name.c_str());
+	hMap = OpenFileMappingA(FILE_MAP_ALL_ACCESS, FALSE, name.c_str());
 	if (!hMap)
 	{
-		hMap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, size >> 32, size & 0xFFFFFFFF, name.c_str());
+		hMap = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, size >> 32, size & 0xFFFFFFFF, name.c_str());
 	}
 	
 	if (hMap)
